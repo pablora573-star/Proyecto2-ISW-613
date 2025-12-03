@@ -1,0 +1,44 @@
+/* ============================================
+   ESTILOS ESPECÍFICOS DEL ADMIN
+   ============================================ */
+
+/* Botón primario del nav */
+nav a.btn-primary {
+  background-color: var(--admin-color);
+  color: white;
+  transition: 0.3s;
+}
+
+nav a.btn-primary:hover {
+  background-color: var(--admin-hover);
+}
+
+/* Botón secundario del nav */
+nav a.btn-secondary {
+  background-color: var(--admin-color);
+  color: white;
+  transition: 0.3s;
+}
+
+nav a.btn-secondary:hover {
+  background-color: var(--admin-hover);
+}
+
+/* Botón del formulario */
+button {
+  background-color: var(--admin-color);
+  color: white;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: var(--admin-hover);
+}
+
+/* Badge */
+.badge {
+  background-color: var(--admin-color);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+}

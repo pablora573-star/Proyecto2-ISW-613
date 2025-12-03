@@ -1,0 +1,31 @@
+
+nav a.btn-primary {
+  background-color: var(--pasajero-color);
+}
+
+nav a.btn-primary:hover {
+  background-color: var(--pasajero-hover);
+}
+
+
+nav a.btn-secondary {
+  background-color: var(--pasajero-color);
+}
+
+nav a.btn-secondary:hover {
+  background-color: var(--pasajero-hover);
+}
+
+/* Botón del formulario */
+button {
+  background-color: var(--pasajero-color);
+}
+
+button:hover {
+  background-color: var(--pasajero-hover);
+}
+
+
+.badge {
+  background-color: var(--pasajero-color);
+}

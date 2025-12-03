@@ -1,0 +1,265 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-light);
+}
+
+.container {
+  max-width: 1200px;
+  margin: var(--spacing-xxl) auto;
+  padding: var(--spacing-xl);
+}
+
+/* ALERTAS */
+.alert {
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  border-radius: var(--radius-sm);
+  border-left: 4px solid;
+}
+
+.alert.success {
+  background-color: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+}
+
+.alert.error {
+  background-color: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+}
+
+/* SECCION */
+.section {
+  background: var(--white);
+  padding: var(--spacing-xxl);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  margin-bottom: var(--spacing-xxl);
+}
+
+.section h2 {
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--pasajero-color);
+}
+
+/* GRID RESERVAS */
+.reservations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+/* TARJETA DE RESERVA */
+.reservation-card {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.reservation-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Header */
+.reservation-card .card-header {
+  padding: var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid var(--bg-light);
+}
+
+.card-header.pendiente {
+  background-color: #fff3cd;
+}
+
+.card-header.aceptada {
+  background-color: #d4edda;
+}
+
+.reservation-card .card-header h3 {
+  color: var(--text-dark);
+  font-size: 16px;
+  flex: 1;
+}
+
+/* Card Body */
+.reservation-card .card-body {
+  padding: var(--spacing-lg);
+}
+
+.card-body .info-row {
+  margin-bottom: var(--spacing-md);
+  font-size: 14px;
+  color: var(--text-medium);
+}
+
+.card-body .info-row strong {
+  color: var(--text-dark);
+  margin-right: var(--spacing-xs);
+}
+
+.card-body .info-row .price {
+  color: var(--pasajero-color);
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Driver Info */
+.card-body .driver-info {
+  background-color: var(--bg-form);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-sm);
+  margin-top: var(--spacing-lg);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.card-body .driver-info strong {
+  color: var(--text-dark);
+}
+
+/* Card Footer */
+.reservation-card .card-footer {
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+/* BADGES */
+.badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.badge-pendiente {
+  background-color: #ffc107;
+  color: #856404;
+}
+
+.badge-aceptada {
+  background-color: #28a745;
+  color: var(--white);
+}
+
+.badge-rechazada {
+  background-color: #dc3545;
+  color: var(--white);
+}
+
+.badge-cancelada {
+  background-color: #6c757d;
+  color: var(--white);
+}
+
+/* BOTONES */
+.btn {
+  display: inline-block;
+  padding: var(--spacing-md) var(--spacing-xl);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  font-weight: bold;
+  text-align: center;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: var(--white);
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: var(--white);
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+/* TABLAS */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: var(--pasajero-color);
+}
+
+thead th {
+  padding: 12px;
+  text-align: left;
+  color: var(--white);
+  font-weight: bold;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border-color);
+}
+
+tbody tr:hover {
+  background-color: var(--bg-form);
+}
+
+tbody td {
+  padding: 12px;
+  font-size: 14px;
+  color: var(--text-medium);
+}
+
+/* NO DATA */
+.no-data {
+  text-align: center;
+  padding: var(--spacing-xxl);
+  color: var(--text-medium);
+  font-style: italic;
+}
+
+.no-data a {
+  color: var(--pasajero-color);
+  text-decoration: underline;
+  margin-left: var(--spacing-xs);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+
+  .reservations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  table th,
+  table td {
+    padding: var(--spacing-sm);
+  }
+}

@@ -1,0 +1,42 @@
+/* ============================================
+   ESTILOS ESPECÍFICOS DE CHOFER
+   ============================================ */
+
+/* Botón primario del nav */
+nav a.btn-primary {
+  background-color: var(--chofer-color);
+
+  
+}
+
+nav a.btn-primary:hover {
+  background-color: var(--chofer-hover);
+}
+
+/* Botón secundario del nav */
+nav a.btn-secondary {
+  background-color: var(--chofer-color);
+ 
+}
+
+nav a.btn-secondary:hover {
+  background-color: var(--chofer-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Botón del formulario */
+button {
+  background-color: var(--chofer-color);
+  
+}
+
+button:hover {
+  background-color: var(--chofer-hover);
+}
+
+/* Badge */
+.badge {
+  background-color: var(--chofer-color);
+  border-radius: 4px;
+}
