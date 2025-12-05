@@ -48,7 +48,7 @@ class CreateReservationsTable extends Migration
             'fecha_creado' => [
                 'type'    => 'DATETIME',
                 'null'    => false,
-                'default' => 'CURRENT_TIMESTAMP',
+                
             ],
 
             'notified' => [

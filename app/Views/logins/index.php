@@ -1,51 +1,16 @@
-<?php
-  //check if user is logged in
-  //if not, redirect to login page
-/*
-  session_start();
-  if (isset($_SESSION['rol'])) {
-    switch ($_SESSION['rol']) {
-        case 'chofer':
-            header("Location: ./pages/dashboard_chofer.php");
-            exit();
-        case 'pasajero':
-            header("Location: ./pages/dashboard_pasajero.php");
-            exit();
-        case 'admin':
-            header("Location: ./pages/dashboard_admin.php");
-            exit();
-        }
-    }
 
-  $error_message = "";
-    if (isset($_GET['error'])) {
-        switch ($_GET['error']) {
-            case "cuenta_pendiente":
-                $error_message = " Tu cuenta está pendiente de aprobación. Por favor espera la activación.";
-                break;
-            case "cuenta_inactiva":
-                $error_message = " Tu cuenta está inactiva. Contacta con el administrador.";
-                break;
-            case "credenciales_invalidas":
-                $error_message = " Cédula o contraseña incorrecta.";
-                break;
-            case "estado_invalido":
-                $error_message = " El estado de tu cuenta no es válido.";
-                break;
-            default:
-                $error_message = "";
-        }
-    }
-*/
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Aventones</title>
-    <link rel="stylesheet" href="./css/index_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="css/variables.css" rel="stylesheet">
+    <link href="css/index_style.css" rel="stylesheet">
 
+    <title>Login - Aventones</title>
+    
 </head>
 <body>
     <div class="login-container">
@@ -68,7 +33,7 @@
            
             <p>¿No tienes cuenta?<br> Regístrate como:</p>
 
-            <a href="./pages/registration_pasajero.php" class="pasajero">Pasajero</a>
+            <a href="/registro/pasajero" class="pasajero">Pasajero</a>
 
             <a href="./pages/registration_chofer.php" class="chofer">Chofer</a>
        

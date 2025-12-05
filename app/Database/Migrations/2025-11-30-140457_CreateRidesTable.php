@@ -56,7 +56,7 @@ class CreateRidesTable extends Migration
             'fecha_creado' => [
                 'type'    => 'DATETIME',
                 'null'    => false,
-                'default' => 'CURRENT_TIMESTAMP',
+                
             ],
         ]);
         $this->forge->addKey('id', true);

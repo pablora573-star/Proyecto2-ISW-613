@@ -6,6 +6,11 @@ class Pasajero extends BaseController
 {
     public function index(): string
     {
-        return view('welcome_message');
+        return view('/pasajeros/registration_pasajero');
+    }
+
+    public function registro(): string
+    {
+        return view('/pasajeros/registration_pasajero');
     }
 }
