@@ -6,7 +6,10 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Login::index');
-//$routes->get('/login', 'Login::index');
+$routes->get('/login', 'Login::inicio');
+$routes->get('/logout', 'Login::logout');
+$routes->get('/buscar_rides', 'Login::buscarRides');
+
 $routes->get('/registro/pasajero', 'Pasajero::registro');
 $routes->get('/registro/chofer', 'Chofer::registro');
 $routes->get('/registro/admin', 'Admin::registro');

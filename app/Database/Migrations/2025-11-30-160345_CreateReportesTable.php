@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateReporteTable extends Migration
+class CreateReportesTable extends Migration
 {
     public function up()
     {
@@ -25,16 +25,43 @@ class CreateReporteTable extends Migration
             'fecha' => [
                 'type' => 'DATE',
             ],
+
+            'lugar_salida' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 150,
+                'null'       => true,
+            ],
+
+            'lugar_llegada' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 150,
+                'null'       => true,
+            ],
+
+            'cantidad_resultados' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'default'    => 0,
+            ],
         ]);
+
+       
         $this->forge->addKey('id', true);
 
-        // Índice
+       
         $this->forge->addKey('user_id');
 
-        // foranea
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+       
+        $this->forge->addForeignKey(
+            'user_id',
+            'users',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
 
-        $this->forge->createTable('reporte');
+      
+        $this->forge->createTable('reporte', true);
     }
 
     public function down()
@@ -42,3 +69,4 @@ class CreateReporteTable extends Migration
         $this->forge->dropTable('reporte');
     }
 }
+

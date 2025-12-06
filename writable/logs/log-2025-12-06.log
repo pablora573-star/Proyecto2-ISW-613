@@ -1,0 +1,73 @@
+CRITICAL - 2025-12-06 00:50:40 --> Error: Class "App\Controllers\RideModel" not found
+[Method: GET, Route: buscar_rides]
+in APPPATH\Controllers\Login.php on line 93.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Login->buscarRides()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Login))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-06 00:53:25 --> CodeIgniter\Exceptions\BadMethodCallException: Call to undefined method App\Models\RideModel::getRides
+[Method: GET, Route: buscar_rides]
+in SYSTEMPATH\Model.php on line 927.
+ 1 APPPATH\Controllers\Login.php(99): CodeIgniter\Model->__call('getRides', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Login->buscarRides()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Login))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-06 00:55:31 --> CodeIgniter\Exceptions\BadMethodCallException: Call to undefined method App\Models\RideModel::getRides
+[Method: GET, Route: buscar_rides]
+in SYSTEMPATH\Model.php on line 927.
+ 1 APPPATH\Controllers\Login.php(99): CodeIgniter\Model->__call('getRides', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Login->buscarRides()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Login))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-06 00:55:33 --> CodeIgniter\Exceptions\BadMethodCallException: Call to undefined method App\Models\RideModel::getRides
+[Method: GET, Route: buscar_rides]
+in SYSTEMPATH\Model.php on line 927.
+ 1 APPPATH\Controllers\Login.php(99): CodeIgniter\Model->__call('getRides', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Login->buscarRides()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Login))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-06 00:59:10 --> CodeIgniter\Exceptions\BadMethodCallException: Call to undefined method App\Models\RideModel::getRides
+[Method: GET, Route: buscar_rides]
+in SYSTEMPATH\Model.php on line 927.
+ 1 APPPATH\Controllers\Login.php(100): CodeIgniter\Model->__call('getRides', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Login->buscarRides()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Login))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-06 00:59:13 --> CodeIgniter\Exceptions\BadMethodCallException: Call to undefined method App\Models\RideModel::getRides
+[Method: GET, Route: buscar_rides]
+in SYSTEMPATH\Model.php on line 927.
+ 1 APPPATH\Controllers\Login.php(100): CodeIgniter\Model->__call('getRides', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Login->buscarRides()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Login))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-12-06 01:06:50 --> ErrorException: Undefined variable $conn
+[Method: GET, Route: buscar_rides]
+in APPPATH\Views\logins\buscar_rides.php on line 122.
+ 1 APPPATH\Views\logins\buscar_rides.php(122): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $conn', 'C:\\xampp\\htdocs\\Proyecto2-ISW-613\\app\\Views\\logins\\buscar_rides.php', 122)
+ 2 SYSTEMPATH\View\View.php(226): include('C:\\xampp\\htdocs\\Proyecto2-ISW-613\\app\\Views\\logins\\buscar_rides.php')
+ 3 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1167): CodeIgniter\View\View->render('logins/buscar_rides', [], true)
+ 5 APPPATH\Controllers\Login.php(102): view('logins/buscar_rides', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Login->buscarRides()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Login))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

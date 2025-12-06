@@ -9,7 +9,7 @@ class Pasajero extends BaseController
         return view('/pasajeros/registration_pasajero');
     }
 
-    public function registro(): string
+    public function registro()
     {
         return view('/pasajeros/registration_pasajero');
     }

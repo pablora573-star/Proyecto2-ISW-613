@@ -35,9 +35,9 @@
 
             <a href="/registro/pasajero" class="pasajero">Pasajero</a>
 
-            <a href="./pages/registration_chofer.php" class="chofer">Chofer</a>
+            <a href="/registro/chofer" class="chofer">Chofer</a>
        
-            <a href="./pages/buscar_rides.php" class="reserva">Viajes</a>
+            <a href="/buscar_rides" class="reserva">Viajes</a>
 
         </div>
     </div>

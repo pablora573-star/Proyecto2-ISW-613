@@ -9,7 +9,8 @@ class Chofer extends BaseController
         return view('/choferes/index');
     }
 
-    public function registro(): string{
+    public function registro()
+    {
         return view('/choferes/registration_chofer');
     }
 
