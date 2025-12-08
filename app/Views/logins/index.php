@@ -23,7 +23,7 @@
         </div>
         <?php endif; ?>
 
-        <form action="./actions/login.php" method="post">
+        <form action="/login/entrar" method="post">
             <input type="text" name="cedula" placeholder="Cedula" required>
             <input type="password" name="password" placeholder="Contraseña" required>
             <button type="submit">Iniciar Sesión</button>

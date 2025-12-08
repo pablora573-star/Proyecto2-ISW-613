@@ -2,11 +2,67 @@
 
 namespace App\Controllers;
 
+use App\Models\RideModel;
+use App\Models\ReservationModel;
+use App\Models\UserModel;
+use App\Models\VehicleModel;
+
 class Chofer extends BaseController
 {
-    public function index(): string
+    public function index()
     {
-        return view('/choferes/index');
+        $session = session();
+
+        // Validación
+        if (!$session->has('user_id') || $session->get('rol') !== 'chofer') {
+            return redirect()->to('/')->with('error', 'sesion_expirada');
+        }
+
+        $userId  = $session->get('user_id');
+
+        // Models
+        $rideModel   = new RideModel();
+        $reservaModel = new ReservationModel();
+        $userModel    = new UserModel();
+
+        // Rides del chofer
+        $rides = $rideModel
+            ->select('rides.*, vehiculos.placa, vehiculos.marca, vehiculos.modelo')
+            ->join('vehiculos', 'vehiculos.id = rides.vehicle_id', 'left')
+            ->where('rides.user_id', $userId)
+            ->orderBy('fecha_viaje', 'DESC')
+            ->orderBy('hora_viaje', 'DESC')
+            ->findAll();
+
+        // Reservaciones pendientes
+        $reservas = $reservaModel
+            ->select("
+                reservations.id AS reserva_id,
+                reservations.estado,
+                reservations.fecha_creado,
+                users.nombre AS nombre_pasajero,
+                users.apellido AS apellido_pasajero,
+                rides.nombre AS nombre_ride,
+                rides.origen,
+                rides.destino,
+                rides.fecha_viaje,
+                rides.hora_viaje,
+                rides.cantidad_espacios
+            ")
+            ->join('rides', 'rides.id = reservations.ride_id')
+            ->join('users', 'users.id = reservations.pasajero_id')
+            ->where('rides.user_id', $userId)
+            ->where('reservations.estado', 'pendiente')
+            ->orderBy('reservations.fecha_creado', 'DESC')
+            ->findAll();
+
+        return view('chofer/index', [
+            'nombre' => $session->get('nombre'),
+            'apellido' => $session->get('apellido'),
+            'foto' => $session->get('foto'),
+            'rides' => $rides,
+            'reservas' => $reservas
+        ]);
     }
 
     public function registro()
@@ -14,91 +70,82 @@ class Chofer extends BaseController
         return view('/choferes/registration_chofer');
     }
 
-    public function store()
+     public function store()
     {
-        $request = $this->request;
+        helper(['form']);
+
         $userModel = new UserModel();
 
-    
-        $validationRules = [
-            'name'        => 'required',
-            'lastName'    => 'required',
-            'cedula'      => 'required|is_unique[users.cedula]',
-            'nacimiento'  => 'required|valid_date',
-            'correo'      => 'required|valid_email|is_unique[users.correo]',
-            'telefono'    => 'required',
-            'password'    => 'required|min_length[6]',
-            'password2'   => 'required|matches[password]',
-            'foto'        => 'uploaded[foto]|max_size[foto,5120]|is_image[foto]',
-        ];
+        $name       = $this->request->getPost('name');
+        $lastName   = $this->request->getPost('lastName');
+        $cedula     = $this->request->getPost('cedula');
+        $nacimiento = $this->request->getPost('nacimiento');
+        $correo     = $this->request->getPost('correo');
+        $telefono   = $this->request->getPost('telefono');
+        $rol        = $this->request->getPost('rol');
+        $password   = $this->request->getPost('password');
+        $password2  = $this->request->getPost('password2');
 
-        if (! $this->validate($validationRules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        if ($password !== $password2) {
+            return redirect()->back()->with('error', 'Las contraseñas no coinciden');
         }
 
-     
-        $foto = $request->getFile('foto');
-        $nombreFoto = $foto->getRandomName();
+        // Validar cédula única
+        if ($userModel->where('cedula', $cedula)->first()) {
+            return redirect()->back()->with('error', 'Esa cédula ya está registrada');
+        }
 
-        $foto->move('/uploads/fotos/', $nombreFoto);
+        // Hash
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-        $fotoRuta = '/uploads/fotos/' . $nombreFoto;
-
-       
-        $passwordHash = password_hash($request->getPost('password'), PASSWORD_DEFAULT);
-
-        
-        $activationToken = bin2hex(random_bytes(32));
+        // Token
+        $token = bin2hex(random_bytes(32));
         $tokenExpiry = date('Y-m-d H:i:s', strtotime('+24 hours'));
 
-        
-        $data = [
-            'nombre'          => $request->getPost('name'),
-            'apellido'        => $request->getPost('lastName'),
-            'cedula'          => $request->getPost('cedula'),
-            'fecha_nacimiento'=> $request->getPost('nacimiento'),
-            'correo'          => $request->getPost('correo'),
-            'telefono'        => $request->getPost('telefono'),
-            'foto_url'        => $fotoRuta,
-            'rol'             => 'chofer',
-            'contra'          => $passwordHash,
-            'estado'          => 'pendiente',
-            'activation_token'=> $activationToken,
-            'token_expiry'    => $tokenExpiry,
-        ];
-
-        $userModel->insert($data);
-
-        $email = \Config\Services::email();
-        $email->setFrom('jpr12cr@gmail.com', 'Aventones');
-        $email->setTo($request->getPost('correo'));
-        $email->setSubject('Activa tu cuenta en Aventones');
-
-        $activationLink = base_url('/activarCuenta?token=' . $activationToken);
-
-        $mensaje = "
-            Hola {$data['nombre']} {$data['apellido']},
-
-            ¡Gracias por registrarte en Aventones como chofer!
-
-            Para activar tu cuenta, haz clic en el siguiente enlace:
-
-            $activationLink
-
-            Este enlace expirará en 24 horas.
-
-            Si no solicitaste esta cuenta, ignora este mensaje.
-        ";
-
-        $email->setMessage($mensaje);
-
-        if (! $email->send()) {
-            // WARNING (correo no enviado pero usuario creado)
-            return redirect()->to('/registration_success?email=' . urlencode($data['correo']) . '&warning=email_failed');
+        // FOTO
+        $foto = $this->request->getFile('foto');
+        if (!$foto->isValid()) {
+            return redirect()->back()->with('error', 'Debe subir una fotografía');
         }
 
-        // ÉXITO
-        return redirect()->to('/registration_success?email=' . urlencode($data['correo']));
+        // Guardar foto
+        $newName = $foto->getRandomName();
+        $foto->move('uploads/fotos', $newName);
+        $fotoRuta = 'uploads/fotos/' . $newName;
+
+        // Insertar usuario
+        $userModel->insert([
+            'nombre'           => $name,
+            'apellido'         => $lastName,
+            'cedula'           => $cedula,
+            'fecha_nacimiento' => $nacimiento,
+            'correo'           => $correo,
+            'telefono'         => $telefono,
+            'foto_url'         => $fotoRuta,
+            'rol'              => $rol,
+            'contra'           => $passwordHash,
+            'estado'           => 'pendiente',
+            'activation_token' => $token,
+            'token_expiry'     => $tokenExpiry,
+            'fecha_creado'     => date('Y-m-d H:i:s'),
+        ]);
+
+        // Enviar correo de activación
+        $email = \Config\Services::email();
+        $email->setFrom('tu_correo@gmail.com', 'Aventones');
+        $email->setTo($correo);
+
+        $email->setSubject("Activa tu cuenta");
+        $email->setMessage(
+            "Hola $name $lastName,<br><br>" .
+            "Activa tu cuenta haciendo clic aquí:<br>" .
+            "<a href='" . base_url("activar/" . $token) . "'>Activar Cuenta</a><br><br>" .
+            "Este enlace vence en 24 horas."
+        );
+
+        $email->send();
+
+        return redirect()->to('/registro/confirmado?email=' . urlencode($correo));
     }
 
     public function update($id)

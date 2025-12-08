@@ -7,7 +7,7 @@ use App\Models\RideModel;
 
 class Login extends BaseController
 {
-    public function index(): string
+    public function index()
     {
         $session = session();
 
@@ -78,12 +78,12 @@ class Login extends BaseController
 
         // Redirigir según rol
         switch ($user['rol']) {
-            case 'chofer':
-                return redirect()->to('/dashboard/chofer');
-            case 'pasajero':
-                return redirect()->to('/dashboard/pasajero');
-            case 'admin':
-                return redirect()->to('/dashboard/admin');
+             case 'chofer':
+                    return redirect()->to('/dashboard/chofer');
+                case 'pasajero':
+                    return redirect()->to('/dashboard/pasajero');
+                case 'administrador':
+                    return redirect()->to('/dashboard/admin');
         }
 
         return redirect()->to('/login')->with('error', 'Estado o rol no válido.');
@@ -99,7 +99,7 @@ class Login extends BaseController
 
         $rides = $ridesModel->getRides($origen, $destino, $orden);
 
-        return view('logins/buscar_rides', [
+        return view('/logins/buscar_rides', [
             'rides'  => $rides,
             'origen' => $origen,
             'destino' => $destino,

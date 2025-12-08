@@ -9,14 +9,27 @@ $routes->get('/', 'Login::index');
 $routes->get('/login', 'Login::inicio');
 $routes->get('/logout', 'Login::logout');
 $routes->get('/buscar_rides', 'Login::buscarRides');
+$routes->post('/login/entrar', 'Login::authentication');
 
 $routes->get('/registro/pasajero', 'Pasajero::registro');
 $routes->get('/registro/chofer', 'Chofer::registro');
 $routes->get('/registro/admin', 'Admin::registro');
 
-$routes->get('/dashboard/chofer', 'DashboardChofer::index');
-$routes->get('/dashboard/pasajero', 'DashboardPasajero::index');
-$routes->get('/dashboard/admin', 'DashboardAdmin::index');
+$routes->get('/dashboard/chofer', 'Chofer::index');
+$routes->get('/dashboard/pasajero', 'Pasajero::index');
+$routes->get('/dashboard/admin', 'Admin::index');
+
+$routes->post('/chofer/store', 'Chofer::store');
+
+
+//rutas de activado de cuentas
+$routes->get('/activar/(:any)', 'Activar::index/$1');
+$routes->get('/registro/confirmado', function () {
+    return view('/common/registration_confirm', ['email' => $_GET['email'] ?? null]);
+});
+$routes->get('/registro/activado', function () {
+    echo "Cuenta activada correctamente"; // puedes mostrar una vista
+});
 
 //Ejemlos
 /*

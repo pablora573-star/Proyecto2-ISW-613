@@ -26,4 +26,20 @@ class UserModel extends Model
         'token_expiry',
         'fecha_creado'
     ];
+
+    public function filtrar($rol = null, $estado = null)
+    {
+        $builder = $this->builder();
+
+        if (!empty($rol)) {
+            $builder->where('rol', $rol);
+        }
+
+        if (!empty($estado)) {
+            $builder->where('estado', $estado);
+        }
+
+        return $builder->get()->getResultArray();
+    }
 }
+

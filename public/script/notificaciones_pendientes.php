@@ -1,99 +1,102 @@
 <?php
 
-include('./common/connection.php');
+namespace App\Commands;
 
-if ($argc < 2) {
-    echo "Usage: php notificaciones_pendientes.php <minutos>\n";
-    exit(1);
-}
+use CodeIgniter\CLI\BaseCommand;
+use CodeIgniter\CLI\CLI;
+use Config\Services;
 
-$minutes = (int)$argv[1];
+class NotificacionesPendientes extends BaseCommand
+{
+    protected $group       = 'Notificaciones';
+    protected $name        = 'notificaciones:pendientes';
+    protected $description = 'Envía correos de reservas pendientes con más de X minutos sin atender.';
+    protected $usage       = 'notificaciones:pendientes <minutos>';
+    protected $arguments   = ['minutos' => 'Minutos transcurridos desde la creación de la reserva'];
 
-if ($minutes <= 0) {
-    echo "Error: El valor de minutos debe ser mayor a 0\n";
-    exit(1);
-}
-
-
-
-// Buscar reservas pendientes sin notificar
-$sql = "
-    SELECT 
-        r.id AS N_reservacion,
-        r.fecha_creado,
-        r.cantidad_asientos,
-        r.notified,
-        u_ch.correo AS chofer_email,
-        u_ch.nombre AS chofer_nombre,
-        u_pa.nombre AS pasajero_nombre,
-        rides.nombre AS ride_nombre,
-        rides.origen,
-        rides.destino,
-        rides.fecha_viaje,
-        rides.hora_viaje
-    FROM reservations r
-    INNER JOIN users u_ch ON u_ch.id = r.chofer_id
-    INNER JOIN users u_pa ON u_pa.id = r.pasajero_id
-    INNER JOIN rides ON rides.id = r.ride_id
-    WHERE r.estado = 'pendiente'
-      AND r.notified = 0
-      AND r.fecha_creado <= (NOW() - INTERVAL ? MINUTE)
-";
-
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, 'i', $minutes);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-
-if (mysqli_num_rows($result) === 0) {
-    echo "No hay reservas pendientes sin notificar con más de $minutes minutos.\n";
-    exit(0);
-}
-
-$emails_sent = 0;
-mysqli_begin_transaction($conn);
-
-while ($row = mysqli_fetch_assoc($result)) {
-    $reservationId = $row['N_reservacion'];
-    $choferEmail = $row['chofer_email'];
-    $choferNombre = $row['chofer_nombre'];
-    $pasajeroNombre = $row['pasajero_nombre'];
-    $rideNombre = $row['ride_nombre'];
-    $origen = $row['origen'];
-    $destino = $row['destino'];
-    $fechaViaje = $row['fecha_viaje'];
-    $horaViaje = $row['hora_viaje'];
-
-    $subject = "Reserva pendiente (ID: $reservationId)";
-    $body = "Hola $choferNombre,\n\n"
-          . "Tienes una solicitud de reserva pendiente de $pasajeroNombre "
-          . "para el ride '$rideNombre'.\n\n"
-          . "Origen: $origen\nDestino: $destino\n"
-          . "Fecha: $fechaViaje\nHora: $horaViaje\n\n"
-          . "Por favor revisa tu panel de reservas para aceptar o rechazar la solicitud.\n\n"
-          . "Saludos,\nEquipo Aventones";
-
-    $headers = "From: Aventones <jpr12cr@gmail.com>\r\n";
-    $headers .= "Reply-To: jpr12cr@gmail.com\r\n";
-    $headers .= "X-Mailer: PHP/" . phpversion();
-    
-    if (mail($choferEmail, $subject, $body, $headers)) {
-            $update = mysqli_prepare($conn, "UPDATE reservations SET notified = 1 WHERE id = ?");
-            mysqli_stmt_bind_param($update, 'i', $reservationId);
-            mysqli_stmt_execute($update);
-            $emails_sent++;
-    } else {
-            echo " Error enviando correo a $choferEmail\n";
+    public function run(array $params)
+    {
+        if (count($params) < 1) {
+            CLI::error("Debe indicar el número de minutos.");
+            return;
         }
+
+        $minutes = (int) $params[0];
+
+        if ($minutes <= 0) {
+            CLI::error("El valor de minutos debe ser mayor a 0.");
+            return;
+        }
+
+        $db = \Config\Database::connect();
+
+        $sql = "
+            SELECT 
+                r.id AS N_reservacion,
+                r.fecha_creado,
+                r.cantidad_asientos,
+                r.notified,
+                u_ch.correo AS chofer_email,
+                u_ch.nombre AS chofer_nombre,
+                u_pa.nombre AS pasajero_nombre,
+                rides.nombre AS ride_nombre,
+                rides.origen,
+                rides.destino,
+                rides.fecha_viaje,
+                rides.hora_viaje
+            FROM reservations r
+            INNER JOIN users u_ch ON u_ch.id = r.chofer_id
+            INNER JOIN users u_pa ON u_pa.id = r.pasajero_id
+            INNER JOIN rides ON rides.id = r.ride_id
+            WHERE r.estado = 'pendiente'
+            AND r.notified = 0
+            AND r.fecha_creado <= (NOW() - INTERVAL $minutes MINUTE)
+        ";
+
+        $query = $db->query($sql);
+        $rows = $query->getResultArray();
+
+        if (empty($rows)) {
+            CLI::write("No hay reservas pendientes sin notificar con más de $minutes minutos.");
+            return;
+        }
+
+        $emailsSent = 0;
+        $db->transBegin();
+
+        $email = Services::email();
+
+        foreach ($rows as $row) {
+
+            $email->clear();
+            $email->setFrom('jpr12cr@gmail.com', 'Aventones');
+            $email->setTo($row['chofer_email']);
+            $email->setSubject("Reserva pendiente (ID: {$row['N_reservacion']})");
+
+            $message = "Hola {$row['chofer_nombre']},\n\n"
+                . "Tienes una solicitud de reserva pendiente de {$row['pasajero_nombre']} "
+                . "para el ride '{$row['ride_nombre']}'.\n\n"
+                . "Origen: {$row['origen']}\nDestino: {$row['destino']}\n"
+                . "Fecha: {$row['fecha_viaje']}\nHora: {$row['hora_viaje']}\n\n"
+                . "Por favor revisa tu panel de reservas para aceptar o rechazar la solicitud.\n\n"
+                . "Saludos,\nEquipo Aventones";
+
+            $email->setMessage($message);
+
+            if ($email->send()) {
+                $db->query("UPDATE reservations SET notified = 1 WHERE id = {$row['N_reservacion']}");
+                $emailsSent++;
+            } else {
+                CLI::error("Error enviando correo a {$row['chofer_email']}");
+            }
+        }
+
+        if ($emailsSent > 0) {
+            $db->transCommit();
+        } else {
+            $db->transRollback();
+        }
+
+        CLI::write("Proceso finalizado. Correos enviados: $emailsSent");
+    }
 }
-
-if ($emails_sent > 0) {
-    mysqli_commit($conn);
-} else {
-    mysqli_rollback($conn);
-}
-
-mysqli_close($conn);
-echo " Proceso finalizado. Correos enviados: $emails_sent\n";
-?>
-
