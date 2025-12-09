@@ -16,9 +16,9 @@
     <h2>Aventones - Dashboard Pasajero</h2>
 
     <div class="nav-links">
-        <a href="/perfil/editar">Editar Perfil</a>
-        <a href="/rides/buscar">Buscar Rides</a>
-        <a href="/reservas/mias">Mis Reservas</a>
+        <a href="/user/edit">Editar Perfil</a>
+        <a href="/buscar_rides">Buscar Rides</a>
+        <a href="/mis-reservas">Mis Reservas</a>
         <a href="/logout">Cerrar Sesión</a>
     </div>
 </nav>

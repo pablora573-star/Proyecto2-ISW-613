@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="/css/variables.css" rel="stylesheet">
-    <link href="/css/registration.css" rel="stylesheet">
+    <link href="/css/forms.css" rel="stylesheet">
     <link href="/css/crear_vehiculo.css" rel="stylesheet">
     <title>Editar Vehículo - Aventones</title>
     
@@ -16,7 +16,7 @@
 <nav>
     <h2>Aventones - Editar Vehículo</h2>
     <div class="nav-links">
-        <a href="<?= site_url('vehiculos') ?>">← Volver a Vehículos</a>
+        <a href="/vehiculos">← Volver a Vehículos</a>
     </div>
 </nav>
 
@@ -27,11 +27,11 @@
         <?php if (!empty($vehiculo['foto'])): ?>
         <div class="current-photo">
             <p><strong>Foto actual:</strong></p>
-            <img src="<?= base_url('uploads/vehiculos/' . $vehiculo['foto']) ?>" alt="Foto del vehículo">
+            <img src="<?= base_url('/uploads/vehiculos/' . $vehiculo['foto']) ?>" alt="Foto del vehículo">
         </div>
         <?php endif; ?>
 
-        <form action="<?= site_url('vehiculo/actualizar') ?>" method="post" enctype="multipart/form-data">
+        <form action="<?= site_url('/vehiculos/update/' . $vehiculo['id']) ?>" method="post" enctype="multipart/form-data">
 
             <input type="hidden" name="vehicle_id" value="<?= $vehiculo['id'] ?>">
 

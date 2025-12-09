@@ -17,7 +17,7 @@
     <nav>
         <h2>Aventones</h2>
         <div class="nav-links">
-            <a href="/registro/chofer" class="btn-primary">Registrar Chofer</a>
+            <a href="/dashboard/chofer" class="btn-primary">← Volver al Dashboard</a>
             <a href="/login">Volver al Login</a>
         </div>
     </nav>
@@ -26,7 +26,7 @@
         <h1>Registro de Usuario</h1>
         <p class="subtitle">Registrándose como: <span class="badge">PASAJERO</span></p>
         
-        <form action="/insertar/pasajero" method="post" enctype="multipart/form-data">
+        <form action="/user/store" method="post" enctype="multipart/form-data">
            
             <!-- Campo oculto con el rol quemado -->
             <input type="hidden" name="rol" value="pasajero">
