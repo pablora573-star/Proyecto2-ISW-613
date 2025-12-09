@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="/css/variables.css" rel="stylesheet">
-    <link href="/css/registration.css" rel="stylesheet">
     <link href="/css/crear_vehiculo.css" rel="stylesheet">
+    <link href="/css/forms.css" rel="stylesheet">
+    
     <title>Crear Vehículo</title>
 </head>
 
@@ -14,7 +15,7 @@
 <nav>
     <h2>Aventones</h2>
     <div class="nav-links">
-        <a href="<?= site_url('vehiculos') ?>">← Volver</a>
+        <a href="/vehiculos">← Volver al Dashboard</a>
     </div>
 </nav>
 
@@ -30,7 +31,7 @@
         </div>
     <?php endif ?>
 
-    <form action="<?= site_url('vehiculo/store') ?>" method="post" enctype="multipart/form-data">
+    <form action="/vehiculos/store" method="post" enctype="multipart/form-data">
 
         <label>Placa:</label>
         <input type="text" name="placa" required><br>

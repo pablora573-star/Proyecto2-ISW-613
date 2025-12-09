@@ -11,7 +11,8 @@ table th {
   text-align: left;
 }
 
-table td {
+table td{
+  color: var(--text-medium) !important;
   padding: 12px;
   border-bottom: 1px solid var(--border-color);
 }
@@ -21,7 +22,7 @@ table tr:hover {
 }
 
 .actions a {
-  color: #2196F3;
+  color: #003057;
   text-decoration: none;
   margin-right: var(--spacing-md);
   transition: 0.2s;

@@ -48,6 +48,22 @@ body {
 .foto-perfil:hover {
   transform: scale(1.05);
 }
+/*
+.btn{
+  display: inline-block;
+  padding: 12px 25px;
+  background-color: var(--admin-color);
+  color: var(--white);
+  text-decoration: none;
+  border-radius: 6px;
+  margin-bottom: 30px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.btn:hover{
+  background-color: var(--admin-hover);
+}*/
 
 .alert {
   padding: var(--spacing-lg);
@@ -232,6 +248,7 @@ tbody td.td-foto {
   display: inline-block;
   padding: var(--spacing-xs) var(--spacing-md);
   text-decoration: none;
+  color: var(--white);
   border-radius: var(--radius-sm);
   font-size: 12px;
   font-weight: bold;

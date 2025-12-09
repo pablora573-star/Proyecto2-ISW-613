@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\UserModel;
 use App\Models\VehicleModel;
 
 class Vehiculo extends BaseController
@@ -16,7 +17,7 @@ class Vehiculo extends BaseController
             return redirect()->to('/')->with('error', 'Sesión expirada.');
         }
 
-        $vehiculoModel = new VehiculoModel();
+        $vehiculoModel = new VehicleModel();
 
         // Obtener vehículos del usuario
         $vehiculos = $vehiculoModel
@@ -24,7 +25,7 @@ class Vehiculo extends BaseController
             ->orderBy('anio', 'DESC')
             ->findAll();
 
-        return view('vehiculos/index', [
+        return view('/choferes/vehiculos', [
             'vehiculos' => $vehiculos,
             'nombre'    => $session->get('nombre'),
             'apellido'  => $session->get('apellido'),
@@ -40,7 +41,7 @@ class Vehiculo extends BaseController
             return redirect()->to('/');
         }
 
-        return view('vehiculos/crear');
+        return view('/choferes/registration_vehiculos');
     }
 
     public function store()
@@ -72,7 +73,7 @@ class Vehiculo extends BaseController
         $newName  = $foto->getRandomName();
         $foto->move('uploads/vehiculos', $newName);
 
-        $vehiculos = new VehiculoModel();
+        $vehiculos = new VehicleModel();
 
         $vehiculos->insert([
             'user_id'            => $session->get('user_id'),
@@ -82,7 +83,7 @@ class Vehiculo extends BaseController
             'modelo'             => $this->request->getPost('modelo'),
             'anio'               => $this->request->getPost('anio'),
             'capacidad_asientos' => $this->request->getPost('capacidad_asientos'),
-            'foto'               => $newName,
+            'foto_url'           => $newName,
         ]);
 
         return redirect()->to('/vehiculos')->with('success', 'Vehículo agregado correctamente.');
@@ -97,7 +98,7 @@ class Vehiculo extends BaseController
             return redirect()->to('/')->with('error', 'Sesión expirada.');
         }
 
-        $vehiculoModel = new VehiculoModel();
+        $vehiculoModel = new VehicleModel();
 
         // Obtener vehículo del usuario logueado
         $vehiculo = $vehiculoModel
@@ -106,15 +107,15 @@ class Vehiculo extends BaseController
             ->first();
 
         if (!$vehiculo) {
-            return redirect()->to('vehiculos')->with('error', 'Vehículo no encontrado.');
+            return redirect()->to('/vehiculos')->with('error', 'Vehículo no encontrado.');
         }
 
-        return view('vehiculos/editar', [
+        return view('/choferes/editar_vehiculo', [
             'vehiculo' => $vehiculo
         ]);
     }
 
-    public function actualizar()
+    public function update($id)
     {
         $session = session();
         
@@ -122,7 +123,7 @@ class Vehiculo extends BaseController
             return redirect()->to('/')->with('error', 'Sesión expirada.');
         }
 
-        $vehiculoModel = new VehiculoModel();
+        $vehiculoModel = new VehicleModel();
 
         $id = $this->request->getPost('vehicle_id');
 
@@ -133,12 +134,12 @@ class Vehiculo extends BaseController
             ->first();
 
         if (!$vehiculo) {
-            return redirect()->to('vehiculos')->with('error', 'Vehículo no encontrado.');
+            return redirect()->to('/vehiculos')->with('error', 'Vehículo no encontrado.');
         }
 
         // Subir archivo si viene uno nuevo
         $foto = $this->request->getFile('foto');
-        $nombreFoto = $vehiculo['foto']; // mantener la actual
+        $nombreFoto = $vehiculo['foto_url']; // mantener la actual
 
         if ($foto && $foto->isValid() && !$foto->hasMoved()) {
             $nombreFoto = $foto->getRandomName();
@@ -153,9 +154,16 @@ class Vehiculo extends BaseController
             'modelo' => $this->request->getPost('modelo'),
             'anio' => $this->request->getPost('anio'),
             'capacidad_asientos' => $this->request->getPost('capacidad_asientos'),
-            'foto' => $nombreFoto
+            'foto_url' => $nombreFoto
         ]);
 
-        return redirect()->to('vehiculos')->with('success', 'Vehículo actualizado exitosamente.');
+        return redirect()->to('/vehiculos')->with('success', 'Vehículo actualizado exitosamente.');
+    }
+
+    public function delete($id)
+    {
+        $model = new VehicleModel();
+        $model->delete($id);
+        return redirect()->to('/vehiculos');
     }
 }

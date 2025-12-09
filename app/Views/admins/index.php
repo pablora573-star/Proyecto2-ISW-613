@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="/css/variables.css" rel="stylesheet">
     <link href="/css/nav.css" rel="stylesheet">
     <link href="/css/tables.css" rel="stylesheet">
+    <link href="/css/admin.css" rel="stylesheet">
     <link href="/css/dashboard_admin.css" rel="stylesheet">
     <title>Dashboard Admin - Aventones</title>
     
@@ -16,9 +17,9 @@
     <nav>
         <h2>Aventones - Dashboard Admin</h2>
         <div class="nav-links">
-            <a href="<?= base_url('admin/crear') ?>">Nuevo Usuario</a>
-            <a href="<?= base_url('admin/editar_perfil') ?>">Editar Perfil</a>
-            <a href="<?= base_url('logout') ?>">Cerrar Sesión</a>
+            <a href="/admin/crear">Nuevo Usuario</a>
+            <a href="/user/edit" class="btn btn-edit">Editar Perfil</a>
+            <a href="/logout">Cerrar Sesión</a>
         </div>
     </nav>
 
@@ -110,9 +111,9 @@
                                     <td class="actions">
                                         <?php if ($u['id'] != $user['id']): ?>
                                             <?php if ($u['estado'] === 'activa'): ?>
-                                                <a href="<?= base_url('admin/cambiarEstado/'.$u['id'].'/inactiva') ?>" class="btn-action btn-deactivate">Desactivar</a>
+                                                <a href="<?= ('/admin/cambiarEstado/'.$u['id'].'/inactiva') ?>" class="btn-action btn-deactivate">Desactivar</a>
                                             <?php else: ?>
-                                                <a href="<?= base_url('admin/cambiarEstado/'.$u['id'].'/activa') ?>" class="btn-action btn-activate">Activar</a>
+                                                <a href="<?= ('/admin/cambiarEstado/'.$u['id'].'/activa') ?>" class="btn-action btn-activate">Activar</a>
                                             <?php endif; ?>
                                         <?php else: ?>
                                             <span class="text-muted">Tú</span>

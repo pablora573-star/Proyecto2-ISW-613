@@ -2,12 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="/css/variables.css" rel="stylesheet">
     <link href="/css/nav.css" rel="stylesheet">
-    <link href="/css/tables.css" rel="stylesheet">
     <link href="/css/dashboard_chofer.css" rel="stylesheet">
+    <link href="/css/tables.css" rel="stylesheet">
     <title>Dashboard Chofer - Aventones</title>
    
 </head>
@@ -16,8 +16,8 @@
 <nav>
     <h2>Aventones - Dashboard Chofer</h2>
     <div class="nav-links">
-        <a href="editar-perfil" class="btn btn-edit">Editar Perfil</a>
-        <a href="<?= base_url('chofer/vehiculos') ?>">Mis Vehículos</a>
+        <a href="/user/edit" class="btn btn-edit">Editar Perfil</a>
+        <a href="/vehiculos">Mis Vehículos</a>
         <a href="/logout">Cerrar Sesión</a>
     </div>
 </nav>
@@ -39,7 +39,7 @@
     <div class="section">
         <h2>Mis Rides</h2>
 
-        <a href="<?= base_url('chofer/rides/crear') ?>" class="btn">Crear Nuevo Ride</a>
+        <a href="/rides/crear" class="btn">Crear Nuevo Ride</a>
 
         <?php if (!empty($rides)): ?>
             <table>
@@ -79,8 +79,8 @@
                     <td><?= esc($ride['cantidad_espacios']) ?></td>
 
                     <td>
-                        <a href="<?= base_url('chofer/rides/editar/' . $ride['id']) ?>">Editar</a>
-                        <a href="<?= base_url('chofer/rides/eliminar/' . $ride['id']) ?>"
+                        <a href="<?= ('/rides/edit/' . $ride['id']) ?>">Editar</a>
+                        <a href="<?= ('/rides/eliminar/' . $ride['id']) ?>"
                            class="delete"
                            onclick="return confirm('¿Eliminar este ride?')">
                            Eliminar

@@ -12,6 +12,9 @@ class ReporteModel extends Model
 
     protected $allowedFields = [
         'user_id',
-        'fecha'
+        'fecha',
+        'lugar_salida',
+        'lugar_llegada',
+        'cantidad_resultados'
     ];
 }

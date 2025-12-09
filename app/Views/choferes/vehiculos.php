@@ -31,7 +31,7 @@
         <div class="error-message"><?= session('error') ?></div>
     <?php endif ?>
 
-    <a href="vehiculo/crear" class="btn">Registrar Nuevo Vehículo</a>
+    <a href="/vehiculos/registro" class="btn">Registrar Nuevo Vehículo</a>
 
     <?php if (!empty($vehiculos)): ?>
     <table>
@@ -49,8 +49,8 @@
         <?php foreach ($vehiculos as $v): ?>
         <tr>
             <td>
-                <?php if (!empty($v['foto'])): ?>
-                    <img src="<?= base_url('uploads/vehiculos/' . $v['foto']) ?>"
+                <?php if (!empty($v['foto_url'])): ?>
+                    <img src="<?= base_url('uploads/vehiculos/' . $v['foto_url']) ?>"
                          alt="Foto"
                          style="width:80px;height:60px;border-radius:4px;">
                 <?php else: ?>
@@ -65,8 +65,8 @@
             <td><?= esc($v['capacidad_asientos']) ?> asientos</td>
 
             <td>
-                <a href="<?= site_url('/vehiculo/editar' . $v['id']) ?>">Editar</a>
-                <a href="<?= site_url('/vehiculo/eliminar' . $v['id']) ?>"
+                <a href="<?= ('/vehiculos/edit/' . $v['id']) ?>">Editar</a>
+                <a href="<?= ('/vehiculos/eliminar/' . $v['id']) ?>"
                    onclick="return confirm('¿Eliminar este vehículo?')"
                    class="delete">Eliminar</a>
             </td>

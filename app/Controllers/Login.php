@@ -88,24 +88,6 @@ class Login extends BaseController
 
         return redirect()->to('/login')->with('error', 'Estado o rol no válido.');
     }
-
-    public function buscarRides()
-    {
-        $ridesModel = new RideModel();
-
-        $origen  = $this->request->getGet('origen');
-        $destino = $this->request->getGet('destino');
-        $orden   = $this->request->getGet('orden') ?? 'fecha_asc';
-
-        $rides = $ridesModel->getRides($origen, $destino, $orden);
-
-        return view('/logins/buscar_rides', [
-            'rides'  => $rides,
-            'origen' => $origen,
-            'destino' => $destino,
-            'orden' => $orden,
-        ]);
-    }
     
     public function logout()
     {

@@ -5,61 +5,54 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+//login
 $routes->get('/', 'Login::index');
 $routes->get('/login', 'Login::inicio');
 $routes->get('/logout', 'Login::logout');
-$routes->get('/buscar_rides', 'Login::buscarRides');
 $routes->post('/login/entrar', 'Login::authentication');
-
+//registro usuarios
 $routes->get('/registro/pasajero', 'Pasajero::registro');
 $routes->get('/registro/chofer', 'Chofer::registro');
 $routes->get('/registro/admin', 'Admin::registro');
-
+//Dashboards
 $routes->get('/dashboard/chofer', 'Chofer::index');
 $routes->get('/dashboard/pasajero', 'Pasajero::index');
 $routes->get('/dashboard/admin', 'Admin::index');
+//Vehiculo
+$routes->get('/vehiculos', 'Vehiculo::index');
+$routes->get('/vehiculos/registro', 'Vehiculo::create');
+$routes->post('/vehiculos/store', 'Vehiculo::store');
+$routes->get('/vehiculos/edit/(:num)', 'Vehiculo::editar/$1');
+$routes->post('/vehiculos/update/(:num)', 'Vehiculo::update/$1');
+$routes->get('/vehiculos/eliminar/(:num)', 'Vehiculo::delete/$1');
+//Ride
+$routes->get('/rides/crear', 'Ride::create');
+$routes->post('/rides/store', 'Ride::store');
+$routes->get('/rides/edit/(:num)', 'Ride::edit/$1');
+$routes->post('/rides/update/(:num)', 'Ride::update/$1');
+$routes->get('/rides/eliminar/(:num)', 'Ride::delete/$1');
+//reservaciones
+$routes->get('/mis-reservas', 'Reservas::index');
+$routes->get('/mis-reservas/cancelar/(:num)', 'Reservas::cancelar/$1');
+$routes->post('/reservar', 'Reservas::reservar');
+//Admin
+$routes->get('/admin/cambiarEstado/(:num)/(:segment)', 'Admin::cambiar_estado/$1/$2');
+$routes->get('/admin/crear', 'Admin::registro');
+//Comunes
+$routes->post('/user/store', 'Common::store');
+$routes->get('/user/edit', 'Common::editar');
+$routes->post('/user/update/(:num)', 'Common::update/$1');
+$routes->get('/buscar_rides', 'Common::buscarRides');
+$routes->get('/crear_reserva/(:num)', 'Common::createReserva/$1');
 
-$routes->post('/chofer/store', 'Chofer::store');
 
 
-//rutas de activado de cuentas
+//Activado de cuentas
 $routes->get('/activar/(:any)', 'Activar::index/$1');
 $routes->get('/registro/confirmado', function () {
     return view('/common/registration_confirm', ['email' => $_GET['email'] ?? null]);
 });
 $routes->get('/registro/activado', function () {
-    echo "Cuenta activada correctamente"; // puedes mostrar una vista
+    echo "Cuenta activada correctamente"; 
 });
 
-//Ejemlos
-/*
-
-//$routes->get('/', 'Student::index');
-$routes->get('students', 'Student::index');
-$routes->get('students/create', 'Student::create');
-$routes->post('students/store', 'Student::store');
-$routes->get('students/edit/(:num)', 'Student::edit/$1');
-$routes->post('students/update/(:num)', 'Student::update/$1');
-//$routes->get('students/inicio', 'Inicio::index');
-
-
-$routes->get('/', 'Inicio::index');
-//$routes->get('login', 'Inicio::index');
-//$routes->get('login/inicioCarrera', 'Inicio::inicioCarrera');
-//$routes->get('login/inicioStudent', 'Inicio::inicioStudent');
-
-//$routes->get('/', 'Carrera::index');
-//$routes->get('carreras', 'Carrera::index');
-$routes->get('carreras/create', 'Carrera::create');
-$routes->post('carreras/store', 'Carrera::store');
-$routes->get('carreras/edit/(:num)', 'Carrera::edit/$1');
-$routes->post('carreras/update/(:num)', 'Carrera::update/$1');
-$routes->get('carreras/inicio', 'Inicio::index');
-// $routes->get('users', 'Users::index');
-// $routes->get('users/create', 'Users::create');
-// $routes->post('users/store', 'Users::store');
-// $routes->get('users/edit/(:num)', 'Users::edit/$1');
-// $routes->post('users/update/(:num)', 'Users::update/$1');
-// $routes->get('users/delete/(:num)', 'Users::delete/$1');
-
-*/
