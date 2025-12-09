@@ -1,0 +1,65 @@
+# -----------------------------------
+# CodeIgniter 4 .gitignore
+# -----------------------------------
+
+/public/uploads/*
+
+# Archivos del sistema CI4
+/writable/*
+!/writable/index.html
+
+# Logs
+/writable/logs/*
+!/writable/logs/index.html
+
+# Caché
+/writable/cache/*
+!/writable/cache/index.html
+
+# Sessions
+/writable/session/*
+!/writable/session/index.html
+
+# Uploads de usuario
+/writable/uploads/*
+!/writable/uploads/index.html
+
+# Archivos de entorno local
+.env
+env
+*.env
+
+# Directorios de vendor
+/vendor/
+
+# Sistema de CodeIgniter descargado con Composer
+/system/
+
+# Archivos de configuración sensibles
+*.ini
+*.json
+*.yaml
+*.yml
+
+# IDEs
+# PhpStorm
+.idea/
+# VSCode
+.vscode/
+
+# Archivos OS
+.DS_Store
+Thumbs.db
+
+# Composer
+composer.lock
+
+# Node (por si usas frontend ahí)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Otros
+*.bak
+*.tmp
+*.log
