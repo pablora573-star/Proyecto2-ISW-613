@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="<?= base_url('css/variables.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('css/nav.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('css/buscar_ride.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('/css/variables.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('/css/nav.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('/css/buscar_rides.css') ?>" rel="stylesheet">
 
     <title>Buscar Rides - Aventones</title>
    
@@ -77,82 +77,85 @@
 
         <?php if (!empty($rides)): ?>
             <h2>Rides Disponibles (<?= count($rides) ?>)</h2>
+            <br>
+            <div class="rides-container">
 
-            <div class="rides-grid">
+                <div class="rides-grid">
+                
+                    <?php foreach ($rides as $ride): ?>
 
-                <?php foreach ($rides as $ride): ?>
+                        <?php 
+                            $asientos_disponibles = 
+                                $ride['cantidad_espacios'] /*- $ride['asientos_reservados']*/; 
+                        ?>
 
-                    <?php 
-                        $asientos_disponibles = 
-                            $ride['cantidad_espacios'] - $ride['asientos_reservados']; 
-                    ?>
+                        <div class="ride-card">
 
-                    <div class="ride-card">
-
-                        <div class="ride-header">
-                            <h3><?= esc($ride['nombre']) ?></h3>
-                            <span class="ride-price">₡<?= number_format($ride['costo_espacio'], 0) ?></span>
-                        </div>
-
-                        <div class="ride-route">
-                            <div class="location">
-                                <strong>Origen:</strong>
-                                <?= esc($ride['origen']) ?>
+                            <div class="ride-header">
+                                <h3><?= esc($ride['nombre']) ?></h3>
+                                <span class="ride-price">₡<?= number_format($ride['costo_espacio'], 0) ?></span>
                             </div>
 
-                            <div class="arrow">→</div>
+                            <div class="ride-route">
+                                <div class="location">
+                                    <strong>Origen:</strong>
+                                    <?= esc($ride['origen']) ?>
+                                </div>
 
-                            <div class="location">
-                                <strong>Destino:</strong>
-                                <?= esc($ride['destino']) ?>
+                                <div class="arrow">→</div>
+
+                                <div class="location">
+                                    <strong>Destino:</strong>
+                                    <?= esc($ride['destino']) ?>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="ride-info">
-                            <div class="info-item">
-                                <strong>Fecha:</strong>
-                                <?= date('d/m/Y', strtotime($ride['fecha_viaje'])) ?>
+                            <div class="ride-info">
+                                <div class="info-item">
+                                    <strong>Fecha:</strong>
+                                    <?= date('d/m/Y', strtotime($ride['fecha_viaje'])) ?>
+                                </div>
+
+                                <div class="info-item">
+                                    <strong>Hora:</strong>
+                                    <?= date('H:i', strtotime($ride['hora_viaje'])) ?>
+                                </div>
                             </div>
 
-                            <div class="info-item">
-                                <strong>Hora:</strong>
-                                <?= date('H:i', strtotime($ride['hora_viaje'])) ?>
+                            <div class="ride-vehicle">
+                                <strong>Vehículo:</strong>
+                                <?= esc($ride['marca'] . ' ' . $ride['modelo'] . ' (' . $ride['anio'] . ')') ?>
                             </div>
+
+                            <div class="ride-seats">
+                                <strong>Asientos disponibles:</strong>
+                                <span class="<?= $asientos_disponibles > 0 ? 'available' : 'full' ?>">
+                                    <?= $asientos_disponibles ?> disponibles.
+                                </span>
+                            </div>
+
+                            <?php if (session()->get('rol') === 'pasajero' && $asientos_disponibles > 0): ?>
+                                <a href="/crear_reserva/<?= esc($ride['id']) ?>" class="btn-reserve">
+                                    Reservar Ahora
+                                </a>
+
+                            <?php elseif (!session()->get('user_id')): ?>
+                                <a href="/" class="btn-login">
+                                    Inicia sesión para reservar
+                                </a>
+
+                            <?php elseif ($asientos_disponibles <= 0): ?>
+                                <button class="btn-full" disabled>
+                                    Sin Disponibilidad
+                                </button>
+
+                            <?php endif; ?>
+
                         </div>
 
-                        <div class="ride-vehicle">
-                            <strong>Vehículo:</strong>
-                            <?= esc($ride['marca'] . ' ' . $ride['modelo'] . ' (' . $ride['anio'] . ')') ?>
-                        </div>
+                    <?php endforeach; ?>
 
-                        <div class="ride-seats">
-                            <strong>Asientos:</strong>
-                            <span class="<?= $asientos_disponibles > 0 ? 'available' : 'full' ?>">
-                                <?= $asientos_disponibles ?> disponibles de <?= $ride['cantidad_espacios'] ?>
-                            </span>
-                        </div>
-
-                        <?php if (session()->get('rol') === 'pasajero' && $asientos_disponibles > 0): ?>
-                            <a href="/crear_reserva/<?= esc($ride['id']) ?>" class="btn-reserve">
-                                Reservar Ahora
-                            </a>
-
-                        <?php elseif (!session()->get('user_id')): ?>
-                            <a href="/" class="btn-login">
-                                Inicia sesión para reservar
-                            </a>
-
-                        <?php elseif ($asientos_disponibles <= 0): ?>
-                            <button class="btn-full" disabled>
-                                Sin Disponibilidad
-                            </button>
-
-                        <?php endif; ?>
-
-                    </div>
-
-                <?php endforeach; ?>
-
+                </div>
             </div>
 
         <?php else: ?>

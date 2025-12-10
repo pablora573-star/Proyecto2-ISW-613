@@ -94,8 +94,10 @@
 
             <form action="/reservar" method="POST" class="reservation-form">
 
+             
                 <input type="hidden" name="ride_id" value="<?= esc($ride['id']) ?>">
                 <input type="hidden" name="chofer_id" value="<?= esc($ride['user_id']) ?>">
+                <input type="hidden" name="asientos_disponibles" value="<?= esc($asientos_disponibles) ?>">
 
                 <label for="cantidad_asientos">¿Cuántos asientos deseas reservar?</label>
                 <select name="cantidad_asientos" id="cantidad_asientos" required onchange="calcularTotal()">

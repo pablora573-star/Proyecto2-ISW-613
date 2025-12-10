@@ -85,74 +85,40 @@ class Reservas extends Controller
             ->first();
 
         if (!$reserva) {
-            return redirect()->to('/pasajeros/reservaciones?error=unauthorized');
+            return redirect()->to('/mis-reservas?error=unauthorized');
         }
 
-        // Cancelar
         $reservationModel->update($reserva_id, ['estado' => 'cancelada']);
 
-        return redirect()->to('/pasajeros/reservaciones?success=reservation_cancelled');
+        return redirect()->to('/mis-reservas?success=reservation_cancelled');
     }
 
     public function reservar()
     {
-      
-        if ($this->request->getMethod() !== 'post') {
-            return redirect()->to('/buscar_rides');
-        }
-
-       
+        // Validación de sesión
         if (!session()->get('user_id') || session()->get('rol') !== 'pasajero') {
             return redirect()->to('/login');
         }
 
+        // Datos enviados
         $ride_id           = (int)$this->request->getPost('ride_id');
         $chofer_id         = (int)$this->request->getPost('chofer_id');
         $pasajero_id       = (int)session()->get('user_id');
         $cantidad_asientos = (int)$this->request->getPost('cantidad_asientos');
-
-       
-        if ($cantidad_asientos < 1 || $cantidad_asientos > 4) {
-            return redirect()->to("/crear_reserva/$ride_id?error=invalid_quantity");
-        }
-
-        $rideModel       = new RideModel();
-        $reservationModel = new ReservationModel();
-
-        //asientos disponibles
-        $ride = $rideModel->select("
-            rides.cantidad_espacios,
-            (SELECT COUNT(*) 
-             FROM reservations 
-             WHERE reservations.ride_id = rides.id 
-             AND estado IN ('pendiente','aceptada')
-            ) AS asientos_reservados
-        ")->where('rides.id', $ride_id)
-          ->first();
-
-        if (!$ride) {
-            return redirect()->to("/buscar_rides?error=ride_not_found");
-        }
-
-        $asientos_disponibles = $ride['cantidad_espacios'] - $ride['asientos_reservados'];
+        $asientos_disponibles = (int)$this->request->getPost('asientos_disponibles');
 
         if ($cantidad_asientos > $asientos_disponibles) {
             return redirect()->to("/crear_reserva/$ride_id?error=insufficient_seats");
         }
 
-    
-        $yaTieneReserva = $reservationModel
-                ->where('ride_id', $ride_id)
-                ->where('pasajero_id', $pasajero_id)
-                ->whereIn('estado', ['pendiente', 'aceptada'])
-                ->first();
-
-        if ($yaTieneReserva) {
-            return redirect()->to("/crear_reserva/$ride_id?error=already_reserved");
+        if ($cantidad_asientos > $asientos_disponibles) {
+            return redirect()->to("/crear_reserva/$ride_id?error=insufficient_seats");
         }
+        $rideModel        = new RideModel();
+        $reservationModel = new ReservationModel();
 
-        
-        $reservationModel->insert([
+        // Insertar reserva
+        $reservationModel->save([
             'ride_id'           => $ride_id,
             'pasajero_id'       => $pasajero_id,
             'chofer_id'         => $chofer_id,
@@ -162,7 +128,14 @@ class Reservas extends Controller
             'notified'          => 0
         ]);
 
-        return redirect()->to("/mis_reservas?success=reservation_created");
+        $rideModel->set('cantidad_espacios', 'cantidad_espacios - ' . $cantidad_asientos, false)
+        ->where('id', $ride_id)
+        ->update();
+
+        return redirect()->to("/mis-reservas?success=reservation_created");
     }
+
+
+
 }
 
