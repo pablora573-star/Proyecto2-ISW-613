@@ -65,20 +65,28 @@ body {
   background-color: var(--pasajero-hover);
 }
 
+.rides-container {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+
 .rides-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 20px;
 }
 
+
 .ride-card {
-  background: linear-gradient(135deg, var(--white) 0%, var(--text-medium) 100%);
-  padding: var(--spacing-xl);
-  border-radius: var(--radius-md);
-  text-align: center;
-  color: var(--shadow-card);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: transform .3s, box-shadow .3s;
+    background: linear-gradient(135deg, var(--white) 0%, var(--text-medium) 100%);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    text-align: left;
+    color: var(--shadow-card);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform .3s, box-shadow .3s;
+    max-width: 100%;
 }
 
 .ride-card:hover {
