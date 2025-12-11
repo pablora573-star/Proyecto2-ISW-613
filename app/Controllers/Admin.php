@@ -7,117 +7,81 @@ class Admin extends BaseController
 {
     public function index()
     {
-         $session = session();
+        $session = session();
 
         if (!$session->has('user_id') || $session->get('rol') !== 'administrador') {
-            return redirect()->to('/login?error=sesion_expirada');
+            return redirect()->to('/login');
         }
 
-        $userModel = new UserModel();
+        $user = [
+            'id'       => $session->get('user_id'),
+            'nombre'   => $session->get('nombre'),
+            'apellido' => $session->get('apellido'),
+            'foto'     => $session->get('foto'),
+        ];
 
-        $rol     = $this->request->getGet('rol');
-        $estado  = $this->request->getGet('estado');
+        $filtroRol    = $this->request->getGet('rol');
+        $filtroEstado = $this->request->getGet('estado');
 
-        $usuarios = $userModel->filtrar($rol, $estado);
+        $userModel = new \App\Models\UserModel();
+
+        if ($filtroRol) {
+            $userModel->where('rol', $filtroRol);
+        }
+
+        if ($filtroEstado) {
+            $userModel->where('estado', $filtroEstado);
+        }
+
+        $usuarios = $userModel->findAll();
+
+        //reporte
+
+        $fechaDesde = $this->request->getGet('desde');
+        $fechaHasta = $this->request->getGet('hasta');
+        $filtroUsuario = $this->request->getGet('user');
+
+        $reporteModel = new \App\Models\ReporteModel();
+
+        if ($fechaDesde) {
+            $reporteModel->where('fecha >=', $fechaDesde);
+        }
+
+        if ($fechaHasta) {
+            $reporteModel->where('fecha <=', $fechaHasta);
+        }
+
+        if ($filtroUsuario) {
+            $reporteModel->where('user_id', $filtroUsuario);
+        }
+
+        $reportes = $reporteModel
+            ->orderBy('fecha', 'DESC')
+            ->findAll();
+
+        $todosUsuarios = (new \App\Models\UserModel())
+            ->select('id, nombre, apellido')
+            ->orderBy('nombre', 'ASC')
+            ->findAll();
 
         return view('/admins/index', [
-            'usuarios'     => $usuarios,
-            'filtroRol'    => $rol,
-            'filtroEstado' => $estado,
-            'user'         => [
-                'id'       => $session->get('user_id'),
-                'nombre'   => $session->get('nombre'),
-                'apellido' => $session->get('apellido'),
-                'foto'     => $session->get('foto')
-            ]
+            'user'          => $user,
+            'usuarios'      => $usuarios,
+            'filtroRol'     => $filtroRol,
+            'filtroEstado'  => $filtroEstado,
+            'reportes'      => $reportes,
+            'fechaDesde'    => $fechaDesde,
+            'fechaHasta'    => $fechaHasta,
+            'todosUsuarios' => $todosUsuarios,
+            'filtroUsuario' => $filtroUsuario
         ]);
     }
+
 
     public function registro()
     {
         return view('/admins/registration_admin');
     }
-    
-    /*
-    public function store()
-    {
-        helper(['form']);
-
-        $userModel = new UserModel();
-
-        $name       = $this->request->getPost('name');
-        $lastName   = $this->request->getPost('lastName');
-        $cedula     = $this->request->getPost('cedula');
-        $nacimiento = $this->request->getPost('nacimiento');
-        $correo     = $this->request->getPost('correo');
-        $telefono   = $this->request->getPost('telefono');
-        $rol        = $this->request->getPost('rol');
-        $password   = $this->request->getPost('password');
-        $password2  = $this->request->getPost('password2');
-
-        if ($password !== $password2) {
-            return redirect()->back()->with('error', 'Las contraseñas no coinciden');
-        }
-
-        // Validar cédula única
-        if ($userModel->where('cedula', $cedula)->first()) {
-            return redirect()->back()->with('error', 'Esa cédula ya está registrada');
-        }
-
-        // Hash
-        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-
-        // Token
-        $token = bin2hex(random_bytes(32));
-        $tokenExpiry = date('Y-m-d H:i:s', strtotime('+24 hours'));
-
-        // FOTO
-        $foto = $this->request->getFile('foto');
-        if (!$foto->isValid()) {
-            return redirect()->back()->with('error', 'Debe subir una fotografía');
-        }
-
-        // Guardar foto
-        $newName = $foto->getRandomName();
-        $foto->move('uploads/fotos', $newName);
-        $fotoRuta = 'uploads/fotos/' . $newName;
-
-        // Insertar usuario
-        $userModel->insert([
-            'nombre'           => $name,
-            'apellido'         => $lastName,
-            'cedula'           => $cedula,
-            'fecha_nacimiento' => $nacimiento,
-            'correo'           => $correo,
-            'telefono'         => $telefono,
-            'foto_url'         => $fotoRuta,
-            'rol'              => $rol,
-            'contra'           => $passwordHash,
-            'estado'           => 'pendiente',
-            'activation_token' => $token,
-            'token_expiry'     => $tokenExpiry,
-            'fecha_creado'     => date('Y-m-d H:i:s'),
-        ]);
-
-        // Enviar correo de activación
-        $email = \Config\Services::email();
-        $email->setFrom('tu_correo@gmail.com', 'Aventones');
-        $email->setTo($correo);
-
-        $email->setSubject("Activa tu cuenta");
-        $email->setMessage(
-            "Hola $name $lastName,<br><br>" .
-            "Activa tu cuenta haciendo clic aquí:<br>" .
-            "<a href='" . base_url("activar/" . $token) . "'>Activar Cuenta</a><br><br>" .
-            "Este enlace vence en 24 horas."
-        );
-
-        $email->send();
-
-        return redirect()->to('/registro/confirmado?email=' . urlencode($correo));
-
-    }
-    */
 
     public function cambiar_estado($id, $estado)
     {
@@ -166,5 +130,7 @@ class Admin extends BaseController
 
         return redirect()->to('/dashboard/admin?success=' . $mensaje);
     }
+
+    
 
 }

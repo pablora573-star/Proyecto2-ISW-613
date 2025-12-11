@@ -132,6 +132,84 @@
 
         </div>
 
+        <div class="section">
+            <h2>Reportes de Búsquedas (<?= count($reportes) ?>)</h2>
+
+            <div class="filters">
+                <form method="GET" class="filter-form">
+
+                    <div class="filter-group">
+                        <label>Desde:</label>
+                        <input type="date" name="desde" value="<?= esc($fechaDesde) ?>" onchange="this.form.submit()">
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Hasta:</label>
+                        <input type="date" name="hasta" value="<?= esc($fechaHasta) ?>" onchange="this.form.submit()">
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Usuario:</label>
+                        <select name="user" onchange="this.form.submit()">
+                            <option value="">Todos</option>
+                            <?php foreach ($todosUsuarios as $u): ?>
+                                <option value="<?= $u['id'] ?>"
+                                    <?= ($filtroUsuario == $u['id']) ? 'selected' : '' ?>>
+                                    <?= esc($u['nombre'] . ' ' . $u['apellido']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <?php if ($fechaDesde || $fechaHasta || $filtroUsuario): ?>
+                        <a href="/dashboard/admin" class="btn-clear">Limpiar filtros</a>
+                    <?php endif; ?>
+
+                </form>
+            </div>
+
+
+            <?php if (!empty($reportes)): ?>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Fecha</th>
+                                <th>Lugar Salida</th>
+                                <th>Lugar Llegada</th>
+                                <th>N° Resultados</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <?php foreach ($reportes as $r): ?>
+                                <tr>
+                                    <td>
+                                        <?php
+                                            $u = array_filter($todosUsuarios, fn($x) => $x['id'] == $r['user_id']);
+                                            $u = array_shift($u);
+                                        ?>
+                                        <?= esc($u['nombre'].' '.$u['apellido']) ?>
+                                    </td>
+
+                                    <td><?= date('d/m/Y', strtotime($r['fecha'])) ?></td>
+                                    <td><?= esc($r['lugar_salida']) ?></td>
+                                    <td><?= esc($r['lugar_llegada']) ?></td>
+                                    <td><?= esc($r['cantidad_resultados']) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            <?php else: ?>
+                <div class="no-data">No se encontraron reportes con los filtros aplicados.</div>
+            <?php endif; ?>
+
+        </div>
+
     </div>
 
 </body>
