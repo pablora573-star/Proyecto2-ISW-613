@@ -93,6 +93,64 @@ class Reservas extends Controller
         return redirect()->to('/mis-reservas?success=reservation_cancelled');
     }
 
+    public function aceptar($id)
+    {
+        $session = session();
+
+        if (!$session->has('user_id') || $session->get('rol') !== 'chofer') {
+            return redirect()->to('/login');
+        }
+
+        $chofer_id = $session->get('user_id');
+        $reserva_id  = (int)$id;
+
+        $reservationModel = new ReservationModel();
+
+        // Verificar la reserva del pasajero
+        $reserva = $reservationModel
+            ->where('id', $reserva_id)
+            ->where('chofer_id', $chofer_id)
+            ->whereIn('estado', ['pendiente'])
+            ->first();
+
+        if (!$reserva) {
+            return redirect()->to('/dashboard/chofer?error=unauthorized');
+        }
+
+        $reservationModel->update($reserva_id, ['estado' => 'aceptada']);
+
+        return redirect()->to('/dashboard/chofer?success=reservation_cancelled');
+    }
+
+    public function rechazar($id)
+    {
+        $session = session();
+
+        if (!$session->has('user_id') || $session->get('rol') !== 'chofer') {
+            return redirect()->to('/login');
+        }
+
+        $chofer_id = $session->get('user_id');
+        $reserva_id  = (int)$id;
+
+        $reservationModel = new ReservationModel();
+
+        // Verificar la reserva del pasajero
+        $reserva = $reservationModel
+            ->where('id', $reserva_id)
+            ->where('chofer_id', $chofer_id)
+            ->whereIn('estado', ['pendiente'])
+            ->first();
+
+        if (!$reserva) {
+            return redirect()->to('/dashboard/chofer?error=unauthorized');
+        }
+
+        $reservationModel->update($reserva_id, ['estado' => 'rechazada']);
+
+        return redirect()->to('/dashboard/chofer?success=reservation_cancelled');
+    }
+
     public function reservar()
     {
         // Validación de sesión

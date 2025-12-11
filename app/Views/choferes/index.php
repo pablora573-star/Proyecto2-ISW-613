@@ -127,12 +127,12 @@
                     <td><strong><?= ucfirst($res['estado']) ?></strong></td>
 
                     <td>
-                        <a href="<?= base_url('chofer/reservas/aceptar/' . $res['reserva_id']) ?>"
+                        <a href="<?=('/reservas/aceptar/' . $res['reserva_id']) ?>"
                            class="btn btn-accept">
                            Aceptar
                         </a>
 
-                        <a href="<?= base_url('chofer/reservas/rechazar/' . $res['reserva_id']) ?>"
+                        <a href="<?=('/reservas/rechazar/' . $res['reserva_id']) ?>"
                            class="btn btn-reject">
                            Rechazar
                         </a>
