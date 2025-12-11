@@ -10,6 +10,9 @@ $routes->get('/', 'Login::index');
 $routes->get('/login', 'Login::inicio');
 $routes->get('/logout', 'Login::logout');
 $routes->post('/login/entrar', 'Login::authentication');
+$routes->post('/login/send', 'Login::sendLink');
+$routes->get('/login/magic/(:any)', 'Login::magicLogin/$1');
+
 //registro usuarios
 $routes->get('/registro/pasajero', 'Pasajero::registro');
 $routes->get('/registro/chofer', 'Chofer::registro');
@@ -35,6 +38,8 @@ $routes->get('/rides/eliminar/(:num)', 'Ride::delete/$1');
 $routes->get('/mis-reservas', 'Reservas::index');
 $routes->get('/mis-reservas/cancelar/(:num)', 'Reservas::cancelar/$1');
 $routes->post('/reservar', 'Reservas::reservar');
+$routes->get('/reservas/aceptar/(:num)', 'Reservas::aceptar/$1');
+$routes->get('/reservas/rechazar/(:num)', 'Reservas::rechazar/$1');
 //Admin
 $routes->get('/admin/cambiarEstado/(:num)/(:segment)', 'Admin::cambiar_estado/$1/$2');
 $routes->get('/admin/crear', 'Admin::registro');

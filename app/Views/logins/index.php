@@ -28,7 +28,21 @@
             <input type="password" name="password" placeholder="Contraseña" required>
             <button type="submit">Iniciar Sesión</button>
         </form>
+
+        <br>
         
+        <div class="login_sinContra">
+            <p style="margin-top: 10px; font-weight: 600;">Iniciar sesión sin contraseña</p>
+
+            <form action="/login/send" method="post">
+                <input type="email" name="email" placeholder="Ingresar correo" required>
+                <button type="submit" class="btn btn-warning" style="width: 100%; margin-top: 5px;">
+                    Enviarme link de acceso
+                </button>
+            </form>
+        </div>
+        <hr>
+
         <div class="register-links">
            
             <p>¿No tienes cuenta?<br> Regístrate como:</p>
